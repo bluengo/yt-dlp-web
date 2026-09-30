@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 //go:embed assets
@@ -21,6 +22,7 @@ func StartServer(port int) {
 
 	fs := http.FileServer(http.FS(assetsFS))
 	http.Handle("/", fs)
+	http.HandleFunc("/download", downloadHandler)
 
 	log.Printf("Starting server on %s...\n", portStr)
 	
@@ -29,3 +31,30 @@ func StartServer(port int) {
 		log.Fatal(err)
 	}
 }
+
+func downloadHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	value := r.FormValue("youtube-urls")
+
+	var urls []string
+
+	for _, line := range strings.Split(value, "\n") {
+		line = strings.TrimSpace(line)
+
+		if line != "" {
+			urls = append(urls, line)
+		}
+	}
+
+	// call downloader placeholder
+
+	log.Printf("URLs: %v\n", urls)
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
+}
+

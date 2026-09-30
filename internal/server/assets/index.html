@@ -11,12 +11,22 @@
     <h1>YouTube to MP3</h1>
     <p>Paste YouTube URLs below to download them as MP3 files.</p>
 
-    <label for="youtube-urls">YouTube URLs</label>
-    <textarea id="youtube-urls" name="youtube-urls" rows="10" cols="60" placeholder="Paste one URL per line"></textarea>
+    <form action="/download" method="POST">
+      <label for="youtube-urls">YouTube URLs</label>
 
-    <div class="actions">
-      <button type="button">Download</button>
-    </div>
+      <textarea
+        id="youtube-urls"
+	name="youtube-urls"
+	rows="10"
+	cols="60"
+	placeholder="Paste one URL per line"
+      ></textarea>
+
+      <div class="actions">
+        <button type="submit">Download</button>
+      </div>
+    </form>
   </main>
 </body>
 </html>
+

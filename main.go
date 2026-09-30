@@ -7,7 +7,10 @@ import (
 	"github.com/bluengo/yt-dlp-web/internal/ytdlp"
 )
 
-const exampleURL = "https://www.youtube.com/watch?v=2wVTBOTsqmo"
+const (
+	exampleURL = "https://www.youtube.com/watch?v=2wVTBOTsqmo"
+	port = 8080
+)
 
 func main() {
 	var downloadsDir string = os.Getenv("HOME") + "/Downloads"

@@ -12,8 +12,19 @@ import (
 //go:embed assets
 var assets embed.FS
 
-func StartServer(port int) {
-	portStr = ":" + strconv.Itoa(port)
+type Server struct {
+	port int
+}
+
+func NewServer(port int) *Server {
+	return &Server{
+		port: port,
+	}
+}
+
+//func StartServer(port int) {
+func (s *Server) Start() {
+	portStr := ":" + strconv.Itoa(s.port)
 
 	assetsFS, err := fs.Sub(assets, "assets") // remove root folder
 	if err != nil {
@@ -26,7 +37,7 @@ func StartServer(port int) {
 
 	log.Printf("Starting server on %s...\n", portStr)
 	
-	err := http.ListenAndServe(portStr, nil)
+	err = http.ListenAndServe(portStr, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -53,8 +64,8 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 	// call downloader placeholder
 
 	log.Printf("URLs: %v\n", urls)
+//	w.WriteHeader(http.StatusOK)
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK"))
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 

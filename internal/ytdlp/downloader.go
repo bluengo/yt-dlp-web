@@ -5,10 +5,9 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"strings"
-)
 
-const ytPath = "www.youtube.com/watch"
+	"github.com/bluengo/yt-dlp-web/internal/url"
+)
 
 type Downloader struct{}
 
@@ -16,9 +15,9 @@ func NewDownloader() *Downloader {
 	return &Downloader{}
 }
 
-func (d *Downloader) Download(url string, outputDir string) error {
-	if !validateURL(url) {
-		return errors.New("Invalid URL: " + url)
+func (d *Downloader) Download(link string, outputDir string) error {
+	if !url.ValidateURL(link) {
+		return errors.New("Invalid URL: " + link)
 	}
 
 	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
@@ -27,8 +26,8 @@ func (d *Downloader) Download(url string, outputDir string) error {
 		}
 	}
 
-	log.Printf("Downloading %s to %s... ▰▰▰▱\n", url, outputDir)
-	err := download(url, outputDir)
+	log.Printf("Downloading %s to %s... ▰▰▰▱\n", link, outputDir)
+	err := download(link, outputDir)
 	if err != nil {
 		return err
 	} else {
@@ -38,22 +37,7 @@ func (d *Downloader) Download(url string, outputDir string) error {
 	return nil
 }
 
-func validateURL(url string) bool {
-	log.Println("Validating URL:", url)
-	if url == "" {
-		log.Println("URL is empty ❌")
-		return false
-	}
-	if !strings.HasPrefix(url, "http://"+ytPath) && !strings.HasPrefix(url, "https://"+ytPath) {
-		log.Println("URL is not a valid YouTube URL ❌")
-		return false
-	}
-
-	log.Println("URL is valid ✔️")
-	return true
-}
-
-func download(url string, outputDir string) error {
+func download(link string, outputDir string) error {
 	log.Println("Running yt-dlp command...")
 	cmd := exec.Command(
 		"yt-dlp",
@@ -62,7 +46,7 @@ func download(url string, outputDir string) error {
 		"-x",
 		"--audio-format", "mp3",
 		"-o", outputDir+"/%(title)s.%(ext)s",
-		url,
+		link,
 	)
 	return cmd.Run()
 }

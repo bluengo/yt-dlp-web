@@ -1,11 +1,11 @@
-package ytdlp
+package downloader
 
 import (
 	"errors"
 	"log"
 	"os"
-	"os/exec"
 
+	"github.com/bluengo/yt-dlp-web/internal/command"
 	"github.com/bluengo/yt-dlp-web/internal/url"
 )
 
@@ -27,7 +27,7 @@ func (d *Downloader) Download(link string, outputDir string) error {
 	}
 
 	log.Printf("Downloading %s to %s... ▰▰▰▱\n", link, outputDir)
-	err := download(link, outputDir)
+	err := command.RunCommand(link, outputDir)
 	if err != nil {
 		return err
 	} else {
@@ -35,18 +35,4 @@ func (d *Downloader) Download(link string, outputDir string) error {
 	}
 
 	return nil
-}
-
-func download(link string, outputDir string) error {
-	log.Println("Running yt-dlp command...")
-	cmd := exec.Command(
-		"yt-dlp",
-		"--no-playlist",
-		"--restrict-filenames",
-		"-x",
-		"--audio-format", "mp3",
-		"-o", outputDir+"/%(title)s.%(ext)s",
-		link,
-	)
-	return cmd.Run()
 }

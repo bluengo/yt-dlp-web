@@ -20,19 +20,15 @@ func (d *Downloader) Download(link string, outputDir string) error {
 		return errors.New("Invalid URL: " + link)
 	}
 
-	if _, err := os.Stat(outputDir); os.IsNotExist(err) {
-		if err != nil {
-			return err
-		}
+	if _, err := os.Stat(outputDir); err != nil {
+		return err
 	}
 
 	log.Printf("Downloading %s to %s... ▰▰▰▱\n", link, outputDir)
-	err := command.RunCommand(link, outputDir)
-	if err != nil {
+	if err := command.RunCommand(link, outputDir); err != nil {
 		return err
-	} else {
-		log.Println("Download completed successfully! ✅")
 	}
 
+	log.Println("Download completed successfully! ✅")
 	return nil
 }

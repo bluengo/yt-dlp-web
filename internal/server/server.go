@@ -22,7 +22,6 @@ func NewServer(port int) *Server {
 	}
 }
 
-// func StartServer(port int) {
 func (s *Server) Start() {
 	portStr := ":" + strconv.Itoa(s.port)
 
@@ -31,8 +30,8 @@ func (s *Server) Start() {
 		log.Fatal(err)
 	}
 
-	fs := http.FileServer(http.FS(assetsFS))
-	http.Handle("/", fs)
+	fileServer := http.FileServer(http.FS(assetsFS))
+	http.Handle("/", fileServer)
 	http.HandleFunc("/download", downloadHandler)
 
 	log.Printf("Starting server on %s...\n", portStr)
@@ -54,7 +53,6 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 	// call downloader placeholder
 
 	log.Printf("URLs: %v\n", urls)
-	//	w.WriteHeader(http.StatusOK)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

@@ -49,17 +49,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	value := r.FormValue("youtube-urls")
-
-	var urls []string
-
-	for _, line := range strings.Split(value, "\n") {
-		line = strings.TrimSpace(line)
-
-		if line != "" {
-			urls = append(urls, line)
-		}
-	}
+	urls := splitLines(r.FormValue("youtube-urls"))
 
 	// call downloader placeholder
 
@@ -67,5 +57,20 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 //	w.WriteHeader(http.StatusOK)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// splitLines returns the non-empty lines of text, without surrounding spaces
+func splitLines(text string) []string {
+	var lines []string
+
+	for _, line := range strings.Split(text, "\n") {
+		line = strings.TrimSpace(line)
+
+		if line != "" {
+			lines = append(lines, line)
+		}
+	}
+
+	return lines
 }
 

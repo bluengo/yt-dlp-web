@@ -22,7 +22,7 @@ func NewServer(port int) *Server {
 	}
 }
 
-//func StartServer(port int) {
+// func StartServer(port int) {
 func (s *Server) Start() {
 	portStr := ":" + strconv.Itoa(s.port)
 
@@ -36,7 +36,7 @@ func (s *Server) Start() {
 	http.HandleFunc("/download", downloadHandler)
 
 	log.Printf("Starting server on %s...\n", portStr)
-	
+
 	err = http.ListenAndServe(portStr, nil)
 	if err != nil {
 		log.Fatal(err)
@@ -54,7 +54,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 	// call downloader placeholder
 
 	log.Printf("URLs: %v\n", urls)
-//	w.WriteHeader(http.StatusOK)
+	//	w.WriteHeader(http.StatusOK)
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
@@ -73,4 +73,3 @@ func splitLines(text string) []string {
 
 	return lines
 }
-
